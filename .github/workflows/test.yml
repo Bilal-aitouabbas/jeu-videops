@@ -15,7 +15,10 @@ jobs:
         working-directory: bootstrap-app/bootstrap
       - name: "mocha tests"
         run: npm run mocha:test
-        working-directory: bootstrap-app/bootstrap      
+        working-directory: bootstrap-app/bootstrap
+      - name: "Eslint tests"
+        run: npm run eslint:check
+        working-directory: bootstrap-app/bootstrap
       - name: "Dire bonjour"
         run: echo "Bonjour, je suis un workflow Github Actions !"
 
