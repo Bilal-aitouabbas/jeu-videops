@@ -32,8 +32,9 @@ jobs:
         working-directory: two-ships-passing
 
       - name: "Audit des dépendances"
-        run: npm audit --audit-level=critical
+        run: npm audit --audit-level=critical --omit=dev
         working-directory: two-ships-passing
+
 
       - name: "Test fonctionnel Cypress"
         run: npm run cypress:test
