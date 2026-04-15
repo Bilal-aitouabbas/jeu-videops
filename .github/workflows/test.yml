@@ -3,8 +3,8 @@ on: [push]
 jobs:
   mon_job:
     runs-on: ubuntu-latest
-    steps: 
-      - name: "Checkout code" 
+    steps:
+      - name: "Checkout code"
         uses: actions/checkout@v3
       - name: "Setup Node"
         uses: actions/setup-node@v3
@@ -23,4 +23,5 @@ jobs:
         run: echo "Bonjour, je suis un workflow Github Actions !"
 
       - name: "Lister les fichiers du projet"
-        run: ls   
+        run: ls
+        working-directory: bootstrap-app/bootstrap

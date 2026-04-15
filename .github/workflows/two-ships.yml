@@ -1,21 +1,47 @@
-name: mon premier workflow
-on: [push, workflow_dispatch]
+name: Two Ships Passing - CI
+
+on:
+  push:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+
 jobs:
-  mon_job:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout code"
         uses: actions/checkout@v3
+
       - name: "Setup Node"
         uses: actions/setup-node@v3
         with:
           node-version: "18"
+
       - name: "Installer les dépendances"
         run: npm install
         working-directory: two-ships-passing
-      - name: "mocha tests"
+
+      - name: "Linter ESLint"
+        run: npm run eslint:check
+        working-directory: two-ships-passing
+
+      - name: "Tests unitaires Mocha"
         run: npm run mocha:test
         working-directory: two-ships-passing
-      - name: "Cypress tests"
+
+      - name: "Audit des dépendances"
+        run: npm audit --audit-level=critical
+        working-directory: two-ships-passing
+
+      - name: "Test fonctionnel Cypress"
         run: npm run cypress:test
         working-directory: two-ships-passing
+
+      - name: "Résumé CI"
+        if: always()
+        run: |
+          echo "## Résultats CI" >> $GITHUB_STEP_SUMMARY
+          echo "::notice::Pipeline terminée - statut : ${{ job.status }}"
+

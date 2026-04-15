@@ -5,12 +5,13 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "eslint:check": "eslint tests/",
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
     "mocha:test": "mocha tests/",
     "cypress:run": "cypress run",
-    "cypress:test": "start-server-and-test serve http://127.0.0.1:5500/two-ships-passing cypress:run"
+    "cypress:test": "start-server-and-test serve http://localhost:4173 cypress:run"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
   },
   "homepage": "https://github.com/razh/js13k-2021#readme",
   "devDependencies": {
+    "eslint-config-google": "0.14.0",
     "cypress": "12.13.0",
     "start-server-and-test": "3.0.2",
     "mocha": "9.1.3",
