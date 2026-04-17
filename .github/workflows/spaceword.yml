@@ -1,0 +1,31 @@
+name: spaceword
+on:
+  workflow_dispatch: #permet de lancer manuellement le workflow via github séction action
+  push: # le workflow ne s'éxécute que quand il y a un  push sur la branche main
+    branches:
+      - main
+  pull_request: #le workflow s'éxecute quand il y a un pull request
+    branches:
+      - main
+jobs: #défini les taches a exécuter 
+  job_1: #ma première tache a exécuter 
+    runs-on: ubuntu-latest #indique sur quelle machine vertuelle exécuter 
+    steps: #sert a faire des étape de tache
+      - name: "Checkout code"
+        uses: actions/checkout@v3 #permet de récuperer le code sur github
+      - name: "Setup Node"
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18" #commande qui permet d'installé node version 18
+      - name: "Installer les dépendances"
+        run: npm install #installation des dépendance 
+        working-directory: spaceword
+      - name: "mocha tests"
+        run: npm run "mocha:testspaceword" #lance le test mocha (test unitaire)
+        working-directory: spaceword
+      - name: "Cypress tests"
+        run: npm run cypress:testspaceword #lance le cypress (test fonctionnelle)
+        working-directory: spaceword #permet d'indiqué dans quelle dossier éxecuter les commandes 
+      - name: "eslint"
+        run: npx eslint 
+        working-directory: spaceword
