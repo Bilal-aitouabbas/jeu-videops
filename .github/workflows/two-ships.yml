@@ -30,6 +30,9 @@ jobs:
       - name: "Tests unitaires Mocha"
         run: npm run mocha:test
         working-directory: two-ships-passing
+      - name: "annotation echec tests unitaires"
+        if: failure()
+        run: echo "::error::Tests unitaires échoués"
 
       - name: "Audit des dépendances"
         run: npm audit --audit-level=critical --omit=dev
@@ -43,6 +46,9 @@ jobs:
       - name: "Tests fonctionnels Cypress"
         run: npm run cypress:test
         working-directory: two-ships-passing
+      - name: "annotation echec tests fonctionnels"
+        if: failure()  
+        run: echo "::error::Tests fonctionnels échoués"
 
 
       - name: "Résumé CI"
@@ -51,3 +57,5 @@ jobs:
           echo "## Résultats CI" >> $GITHUB_STEP_SUMMARY
           echo "::notice::Pipeline terminée - statut : ${{ job.status }}"
 
+        
+      
