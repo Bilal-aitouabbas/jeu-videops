@@ -1,31 +1,46 @@
-name: spaceword
+name: SpaceWord - CI
+
 on:
-  workflow_dispatch: #permet de lancer manuellement le workflow via github séction action
-  push: # le workflow ne s'éxécute que quand il y a un  push sur la branche main
+  push:
+  workflow_dispatch:
+  pull_request:
     branches:
       - main
-  pull_request: #le workflow s'éxecute quand il y a un pull request
-    branches:
-      - main
-jobs: #défini les taches a exécuter 
-  job_1: #ma première tache a exécuter 
-    runs-on: ubuntu-latest #indique sur quelle machine vertuelle exécuter 
-    steps: #sert a faire des étape de tache
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
       - name: "Checkout code"
-        uses: actions/checkout@v3 #permet de récuperer le code sur github
+        uses: actions/checkout@v3
+
       - name: "Setup Node"
         uses: actions/setup-node@v3
         with:
-          node-version: "18" #commande qui permet d'installé node version 18
+          node-version: "18"
+
       - name: "Installer les dépendances"
-        run: npm install #installation des dépendance 
+        run: npm install
         working-directory: spaceword
-      - name: "mocha tests"
-        run: npm run "mocha:testspaceword" #lance le test mocha (test unitaire)
+
+      - name: "Linter ESLint"
+        run: npm run eslint:check
         working-directory: spaceword
-      - name: "Cypress tests"
-        run: npm run cypress:testspaceword #lance le cypress (test fonctionnelle)
-        working-directory: spaceword #permet d'indiqué dans quelle dossier éxecuter les commandes 
-      - name: "eslint"
-        run: npx eslint 
+
+      - name: "Tests unitaires Mocha"
+        run: npm run mocha:testspaceword
         working-directory: spaceword
+
+      - name: "Audit des dépendances"
+        run: npm audit --audit-level=critical --omit=dev
+        working-directory: spaceword
+
+      - name: "Tests fonctionnels Cypress"
+        run: npm run cypress:testspaceword
+        working-directory: spaceword
+
+      - name: "Résumé CI"
+        if: always()
+        run: |
+          echo "## SpaceWord - Résultats CI" >> $GITHUB_STEP_SUMMARY
+          echo "::notice::Pipeline terminée - statut : ${{ job.status }}"
